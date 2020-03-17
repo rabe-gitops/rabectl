@@ -1,8 +1,8 @@
-# Infrastructure
+# rabectl
 
-[![License](https://img.shields.io/github/license/rabe-gitops/infrastructure)](LICENSE)
+[![License](https://img.shields.io/github/license/rabe-gitops/rabectl)](LICENSE)
 
-Repository containing the CDK files to get started with Rabe GitOps on AWS
+Repository containing the Rabe GitOps CLI (rabectl) source code
 
 ### Getting started
 
@@ -14,12 +14,3 @@ Note: as of now, some Helm charts still don't support Helm 3
     npm install -g cdk
     ```
 
-3. Install the dependencies:
-    ```
-    pip3 install -r requirements.txt
-    ```
-
-4. Deploy the template:
-    ```
-    cdk deploy
-    ```
