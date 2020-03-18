@@ -1,11 +1,11 @@
-from os import path
+import os
 from setuptools import setup, find_packages
 
 # Get current location
-here = path.abspath(path.dirname(__file__))
+here = os.path.abspath(os.path.dirname(__file__))
 
 # Get the long description from the README file
-with open(path.join(here, 'README.md'), encoding='utf-8') as f:
+with open(os.path.join(here, 'README.md'), encoding='utf-8') as f:
     readme = f.read()
 
 # Setup
@@ -31,7 +31,7 @@ setup(
         'boto3',
         'click',
         'pyfiglet',
-        'PyInquirer'
+        'pyinquirer'
     ]
 )
 

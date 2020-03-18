@@ -29,7 +29,7 @@ def start(name):
             folder_name=gitops_folder
         ))
 
-    # Retrieve resources with inquirer 
+    # Retrieve resources with the inquirer 
     resources = rabectl.status.Resources()
     resources.ask()
     resources.store(os.path.join(gitops_folder,'rabe.yaml'))
