@@ -20,7 +20,7 @@ setup(
     url='https://www.rabegitops.it/',
     package_dir={'': 'src'},
     packages=find_packages(where='src'),
-    python_requires='>=3.0.*, <4',
+    python_requires='>=3.3.*, <4',
     entry_points={
         'console_scripts': [
             'rabectl=rabectl:main',

@@ -22,14 +22,25 @@ def start(name):
 
     # Create GitOps folder
     gitops_folder = os.path.join(os.getcwd(), name)
-    try:
-        os.makedirs(gitops_folder, exist_ok=False)
-    except FileExistsError:
+
+    if os.path.exists(gitops_folder):
         sys.exit('The "{folder_name}" folder already exists!'.format(
-            folder_name=gitops_folder
+            folder_name=name
         ))
+        
 
     # Retrieve resources with the inquirer 
     resources = rabectl.status.Resources()
-    resources.ask()
-    resources.store(os.path.join(gitops_folder,'rabe.yaml'))
+    answers = resources.ask()
+    if len(answers) == 0:
+        sys.exit(1)
+
+    os.makedirs(gitops_folder, exist_ok=False)
+    resources.store(os.path.join(gitops_folder, 'rabe.yaml'))
+
+    #session = boto3.Session(profile_name='dev')
+    #provider "aws" {
+    # region                  = "us-west-2"
+    # shared_credentials_file = "/Users/tf_user/.aws/creds"
+    # profile                 = "customprofile"
+    # }

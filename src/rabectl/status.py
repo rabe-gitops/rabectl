@@ -1,7 +1,20 @@
 import os
 import yaml
 import click
-from PyInquirer import Token, Separator, prompt, style_from_dict
+import boto3
+from PyInquirer import prompt, style_from_dict
+from botocore.exceptions import ProfileNotFound
+from PyInquirer import Token, Separator, Validator, ValidationError
+
+class AWSProfileValidator(Validator):
+    def validate(self, profile_doc):
+        try:
+            boto3.Session(profile_name=profile_doc.text)
+        except ProfileNotFound:
+            raise ValidationError(
+                message='Profile not found! Enter a valid profile name, or create it: "aws configure --profile <PROFILE_NAME>"',
+                cursor_position=len(profile_doc.text)
+            )
 
 class Resources:
 
@@ -22,17 +35,24 @@ class Resources:
             'name': 'cloud',
             'choices': [
                 {
-                    'name': 'AWS (Amazon Web Services)'
-                },
+                    'name': 'AWS'
+                }
             ]
+        },
+        {
+            'when': lambda answers: answers['cloud'] == 'AWS',
+            'type': 'input',
+            'message': 'Insert a valid AWS CLI profile name',
+            'name': 'profile',
+            'validate': AWSProfileValidator
         }
     ]
 
     answers = {}
 
-
     def ask(self):
         self.answers = prompt(self.questions, style=self.style)
+        return self.answers
 
     def load(self, path):
         with open(path, 'r') as f:
