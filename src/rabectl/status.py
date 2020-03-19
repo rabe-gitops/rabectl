@@ -12,7 +12,8 @@ class AWSProfileValidator(Validator):
             boto3.Session(profile_name=profile_doc.text)
         except ProfileNotFound:
             raise ValidationError(
-                message='Profile not found! Enter a valid profile name, or create it: "aws configure --profile <PROFILE_NAME>"',
+                message=('Profile not found! Enter a valid profile name, or create it: '
+                         '"aws configure --profile <PROFILE_NAME>"'),
                 cursor_position=len(profile_doc.text)
             )
 
