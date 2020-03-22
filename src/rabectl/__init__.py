@@ -48,8 +48,8 @@ as several resources, belonging to many services, are going to be created.
 
     resources = rabectl.status.Resources()
     answers = resources.ask()
-    if len(answers) == 0:
-        sys.exit(1)
+    if len(answers) == 0 or not answers.pop('continue'):
+        sys.exit('Project creation canceled.')
 
     os.makedirs(gitops_folder, exist_ok=False)
     os.chdir(gitops_folder)
@@ -73,12 +73,12 @@ def delete(name):
     if not os.path.exists(gitops_file):
         sys.exit('No rabe.yaml file found in the {folder_name} path!'.format(folder_name=name))
 
-    prompt({
+    sys.exit('Project deletion canceled.') if not prompt({
         'type': 'confirm',
         'message': 'Are you sure you want to destroy your pipeline and its local folder?',
-        'name': 'exit',
+        'name': 'continue',
         'default': False
-    })
+    })['continue'] else print('Project deletion started...')
 
     resources = rabectl.status.Resources()
     status = resources.load(gitops_file)

@@ -1,4 +1,5 @@
 import os
+import sys
 import yaml
 import click
 import boto3
