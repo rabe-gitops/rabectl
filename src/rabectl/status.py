@@ -6,6 +6,7 @@ from PyInquirer import prompt, style_from_dict
 from botocore.exceptions import ProfileNotFound
 from PyInquirer import Token, Separator, Validator, ValidationError
 
+
 class AWSProfileValidator(Validator):
     def validate(self, profile_doc):
         try:
@@ -31,6 +32,11 @@ class Resources:
 
     questions = [
         {
+            'type': 'input',
+            'message': 'Insert a project name (UpperCamelCaseRecommended)',
+            'name': 'project'
+        },
+        {
             'type': 'list',
             'message': 'Select your cloud provider',
             'name': 'cloud',
@@ -44,8 +50,35 @@ class Resources:
             'when': lambda answers: answers['cloud'] == 'AWS',
             'type': 'input',
             'message': 'Insert a valid AWS CLI profile name',
-            'name': 'profile',
+            'name': 'aws.profile',
             'validate': AWSProfileValidator
+        },
+        {
+            'when': lambda answers: answers['cloud'] == 'AWS',
+            'type': 'input',
+            'message': 'Insert a valid AWS region name',
+            'name': 'aws.region'
+        },
+        {
+            'type': 'input',
+            'message': 'Insert a valid GitHub organization name',
+            'name': 'github.owner'
+        },
+        {
+            'type': 'input',
+            'message': 'Insert a valid name for your new IaC repository',
+            'name': 'github.repo'
+        },
+        {
+            'type': 'password',
+            'message': 'Insert a valid GitHub token with admin permissions',
+            'name': 'github.token'
+        },
+        {
+            'type': 'confirm',
+            'message': 'Are you sure you want to deploy your pipeline?',
+            'name': 'continue',
+            'default': True
         }
     ]
 
@@ -58,7 +91,9 @@ class Resources:
     def load(self, path):
         with open(path, 'r') as f:
             self.answers = yaml.load(f, Loader=yaml.FullLoader)
+            return self.answers
 
     def store(self, path):
         with open(path, 'w') as f:
             yaml.dump(self.answers, f, default_flow_style=False)
+
